@@ -9,6 +9,7 @@ mongoose.connect('mongodb+srv://jozeph01:Q9TeXYy5ahyDiI8o@cluster0.haqyrhf.mongo
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,6 +19,6 @@ app.use((req, res, next) => {
 });
 
 
-app.use('/api/user',userRouter);
+app.use('/api/auth',userRouter);
 
 module.exports = app;

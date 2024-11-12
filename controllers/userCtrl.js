@@ -6,8 +6,10 @@ exports.signup = (req,res,next)=>{
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
+            username: req.body.username,
             email: req.body.email,
-            password: hash
+            password: hash,
+            role: req.body.role
         });
         user.save()
         .then(()=> res.status(201).json({message: 'Utilisateur cree !'}))
@@ -41,6 +43,29 @@ User.findOne({email: req.body.email })
 .catch(error => res.status(500).json({ error }));
 };
 
-exports.updateStatus = (req,res,next) => {
-    
-}
+exports.getAllUsers = (req,res,next) => {
+    User.find()
+    .then(users => res.status(200).json(users))
+    .catch(error => res.status(400).json({error}));
+};
+
+
+exports.banUser = (req, res, next) => {
+    User.updateOne({ _id: req.params.id }, { banned: true })
+        .then(() => res.status(200).json({ message: 'User banned successfully!' }))
+        .catch(error => res.status(400).json({ error }));
+};
+
+exports.updateUser = (req,res,next) => {
+    User.updateOne({_id:req.params.id}, {...req.body, _id:req.params.id})
+    .then(() => res.status(200).json({message: 'User modified'}))
+    .catch(error => res.status(400).json({error}));
+};
+
+exports.deleteUser = (req,res,next) => {
+    User.deleteOne({_id:req.params.id})
+    .then(() => res.status(200).json({message: 'User deleted'}))
+    .catch(error => res.status(400).json({error}));
+};
+
+
