@@ -18,30 +18,49 @@ exports.signup = (req,res,next)=>{
     .catch(error => res.status(500).json({ error }));
 };
 
-exports.login = (req,res,next)=>{
-User.findOne({email: req.body.email })
-.then(user => {
-    if(!user){
-        return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
-    }
-    bcrypt.compare(req.body.password, user.password)
-    .then(valid => {
-        if(!valid){
-            return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
-        }
-        res.status(200).json({
-            userId: user._id,
-            token: jwt.sign(
-                {userId: user._id},
-            'RANDOM_TOKEN_SECRET',
-            {expiresIn: '24h'}
-            )
-        });
-    })
-    .catch(error => res.status(500).json({ error }));
-})
-.catch(error => res.status(500).json({ error }));
+exports.login = (req, res, next) => {
+    User.findOne({ email: req.body.email })
+        .then(user => {
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid login/password' });
+            }
+
+            bcrypt.compare(req.body.password, user.password)
+                .then(valid => {
+                    if (!valid) {
+                        return res.status(401).json({ message: 'Invalid login/password' });
+                    }
+
+                    // Create a JWT token
+                    const token = jwt.sign(
+                        { userId: user._id },
+                        'RANDOM_TOKEN_SECRET',
+                        { expiresIn: '24h' }
+                    );
+
+                    // Set the token in a cookie
+                    res.cookie('token', token, {
+                        httpOnly: true,  // Make the cookie inaccessible to client-side JavaScript
+                        secure: process.env.NODE_ENV === 'production',  // Set to true in production for HTTPS
+                        maxAge: 24 * 60 * 60 * 1000  // Cookie expires after 24 hours
+                    });
+
+                    res.status(200).json({
+                        message: 'Login successful',
+                        userId: user._id
+                    });
+                })
+                .catch(error => res.status(500).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
 };
+
+
+exports.logout = (req, res, next) => {
+    res.clearCookie('token');  // Clear the token cookie
+    res.status(200).json({ message: 'Logout successful' });
+};
+
 
 exports.getAllUsers = (req,res,next) => {
     User.find()

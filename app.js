@@ -1,9 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const app = express();
+app.use(cookieParser()); 
 
 const userRouter = require('./router/userRouter');
+const chatRoomRoutes = require('./router/chatroomRouter');
+const messageRouter = require('./router/messageRouter');
 
 mongoose.connect('mongodb+srv://jozeph01:Q9TeXYy5ahyDiI8o@cluster0.haqyrhf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
     .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -20,5 +24,8 @@ app.use((req, res, next) => {
 
 
 app.use('/api/auth',userRouter);
+app.use('/api',chatRoomRoutes);
+app.use('/api',messageRouter);
+
 
 module.exports = app;

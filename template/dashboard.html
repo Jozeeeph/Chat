@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Back Office Dashboard</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Dashboard</h2>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#users">User Management</a></li>
+      <li><a href="#messages">Messages</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#logout">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+      <h1>ChatRoom Dashboard</h1>
+      <div class="user-profile">
+        <img src="./images/admin.jfif" alt="User Profile Picture"> <!-- Profile Picture -->
+        <span>Admin</span>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div class="content">
+
+      <!-- Section Title -->
+      <h2>Overview</h2>
+
+      <!-- Cards -->
+      <div class="card">
+        <h3>Total Users</h3>
+        <p>245 registered users</p>
+      </div>
+
+      <div class="card">
+        <h3>Messages Today</h3>
+        <p>128 new messages</p>
+      </div>
+
+      <div class="card">
+        <h3>Active Sessions</h3>
+        <p>50 users currently online</p>
+      </div>
+
+      <!-- Data Table -->
+      <h2>User Activity</h2>
+      <table class="table">
+        <tr>
+          <th>Username</th>
+          <th>Status</th>
+          <th>Last Login</th>
+          <th>Actions</th>
+        </tr>
+        <tr>
+          <td>JohnDoe</td>
+          <td>Online</td>
+          <td>Today</td>
+          <td><button class="button">View</button></td>
+        </tr>
+        <tr>
+          <td>JaneSmith</td>
+          <td>Offline</td>
+          <td>Yesterday</td>
+          <td><button class="button">View</button></td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+</body>
+</html>
