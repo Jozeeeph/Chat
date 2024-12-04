@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Rooms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 20px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #f0ad4e;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .participant {
+            padding: 6px 0;
+            font-size: 14px;
+            color: #555;
+            border-bottom: 1px solid #eee;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/dashboard">Home Dashboard</a>
+    </nav>
+    <h1>List of Chat Rooms</h1>
+    <% if (chatRooms.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Room Name</th>
+                    <th>Participants</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% chatRooms.forEach((room, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= room.roomName %></td>
+                        <td>
+                            <% room.participants.forEach(participant => { %>
+                                <div class="participant">
+                                    <%= participant.username %> (<%= participant.email %>)
+                                </div>
+                            <% }); %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No chat rooms available.</p>
+    <% } %>
+</body>
+</html>

@@ -9,4 +9,4 @@ const adminSchema = mongoose.Schema({
     privileges:{type:[String],required:true}
 })
 
-module.exports = mongoose.model('Admin',userSchema);
+module.exports = mongoose.model('Admin',adminSchema);

@@ -1,7 +1,7 @@
 const ChatRoom = require('../models/ChatRoom');
 
 // Create a new chat room
-exports.createChatRoom = (req, res, next) => {
+exports.createChatRoom = (req, res) => {
     const chatRoom = new ChatRoom({
         roomName: req.body.roomName,
         participants: req.body.participants  // Array of user IDs
@@ -13,15 +13,15 @@ exports.createChatRoom = (req, res, next) => {
 };
 
 // Get all chat rooms
-exports.getAllChatRooms = (req, res, next) => {
+exports.getAllChatRooms = (req, res) => {
     ChatRoom.find()
-        .populate('participants', 'username email')  // Enrich participant details
+        .populate('participants', 'username email')
         .then(chatRooms => res.status(200).json(chatRooms))
         .catch(error => res.status(400).json({ error }));
 };
 
 // Get a specific chat room by ID
-exports.getChatRoomById = (req, res, next) => {
+exports.getChatRoomById = (req, res) => {
     ChatRoom.findById(req.params.id)
         .populate('participants', 'username email')
         .then(chatRoom => {
@@ -34,7 +34,7 @@ exports.getChatRoomById = (req, res, next) => {
 };
 
 // Add a participant to a chat room
-exports.addParticipant = (req, res, next) => {
+exports.addParticipant = (req, res) => {
     ChatRoom.findByIdAndUpdate(
         req.params.id,
         { $addToSet: { participants: req.body.userId } },  // Avoid duplicate participants
@@ -45,7 +45,7 @@ exports.addParticipant = (req, res, next) => {
 };
 
 // Remove a participant from a chat room
-exports.removeParticipant = (req, res, next) => {
+exports.removeParticipant = (req, res) => {
     ChatRoom.findByIdAndUpdate(
         req.params.id,
         { $pull: { participants: req.body.userId } },  // Remove the specified participant
@@ -56,7 +56,7 @@ exports.removeParticipant = (req, res, next) => {
 };
 
 // Delete a chat room by ID
-exports.deleteChatRoom = (req, res, next) => {
+exports.deleteChatRoom = (req, res) => {
     ChatRoom.findByIdAndDelete(req.params.id)
         .then(() => res.status(200).json({ message: 'Chat room deleted successfully!' }))
         .catch(error => res.status(400).json({ error }));
