@@ -5,10 +5,14 @@
     <title>Chat Rooms</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
+        }
+
+        .container {
+            flex: 1;
         }
 
         nav {
@@ -30,9 +34,14 @@
         }
 
         h1 {
-            color: #333;
+            color: #c3c3c3;
             text-align: center;
             margin: 40px 0;
+        }
+
+        h2{
+            margin-left: 43%;
+            margin-top: 2%;
         }
 
         table {
@@ -56,6 +65,13 @@
             font-size: 16px;
         }
 
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
         tr:hover {
             background-color: #f1f1f1;
         }
@@ -76,13 +92,25 @@
             color: #555;
             text-align: center;
         }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            height:20px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+
     </style>
 </head>
 <body>
-    <nav>
-        <a href="/dashboard">Home Dashboard</a>
-    </nav>
-    <h1>List of Chat Rooms</h1>
+    <%- include('partials/header') %>
+
+
+    <h2>List of Chat Rooms</h2>
     <% if (chatRooms.length > 0) { %>
         <table>
             <thead>
@@ -93,7 +121,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% chatRooms.forEach((room, index) => { %>
+                <% chatRooms.filter(room => room.participants.length > 0).forEach((room, index) => { %>
                     <tr>
                         <td><%= index + 1 %></td>
                         <td><%= room.roomName %></td>
@@ -101,15 +129,21 @@
                             <% room.participants.forEach(participant => { %>
                                 <div class="participant">
                                     <%= participant.username %> (<%= participant.email %>)
+                                    <% if (participant.banned) { %>
+                                        <span style="color: red; font-weight: bold;"> - Banned</span>
+                                    <% } %>
                                 </div>
                             <% }); %>
                         </td>
                     </tr>
                 <% }); %>
             </tbody>
+            
         </table>
     <% } else { %>
         <p>No chat rooms available.</p>
     <% } %>
+
+    <%- include('partials/footer') %>
 </body>
 </html>

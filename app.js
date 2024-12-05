@@ -43,7 +43,7 @@ app.use('/api', messageRouter);
 // Routes for views
 app.get('/login', (req, res) => res.render('login'));
 
-app.get('/dashboard',authMiddleware, async (req, res) => {
+app.get('/dashboard',authMiddleware,roleMiddleware, async (req, res) => {
     const users = await User.find();
     
     res.render('dashboard', {users });
@@ -51,7 +51,7 @@ app.get('/dashboard',authMiddleware, async (req, res) => {
 });
 
 
-app.get('/chatrooms-page', async (req, res) => {
+app.get('/chatrooms-page',authMiddleware,roleMiddleware, async (req, res) => {
     try {
         const chatRooms = await ChatRoom.find().populate('participants', 'username email');
         res.render('chatrooms-page', { chatRooms });  // Ensure 'chatrooms-page.ejs' exists

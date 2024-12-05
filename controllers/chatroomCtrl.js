@@ -33,15 +33,44 @@ exports.getChatRoomById = (req, res) => {
         .catch(error => res.status(400).json({ error }));
 };
 
+
 // Add a participant to a chat room
 exports.addParticipant = (req, res) => {
-    ChatRoom.findByIdAndUpdate(
-        req.params.id,
-        { $addToSet: { participants: req.body.userId } },  // Avoid duplicate participants
-        { new: true }
-    )
-    .then(updatedRoom => res.status(200).json(updatedRoom))
-    .catch(error => res.status(400).json({ error }));
+    const userId = req.body.userId;  // Assuming userId is passed in the request body
+
+    // Ensure that we only send one response
+    ChatRoom.findById(req.params.id)
+        .then(chatroom => {
+            if (!chatroom) {
+                return res.status(404).json({ message: 'Chatroom not found' });
+            }
+
+            // Check if the user is already a participant
+            const isAlreadyParticipant = chatroom.participants.some(
+                participant => participant._id.toString() === userId.toString()
+            );
+
+            if (isAlreadyParticipant) {
+                return res.status(400).json({ message: 'User is already a participant' });
+            }
+
+            // Add the user to the participants array
+            chatroom.participants.push({ _id: userId });
+
+            return chatroom.save();
+        })
+        .then(updatedRoom => {
+            // Send the response only once after the chatroom is updated
+            console.log("user successfully added to" , updatedRoom);
+            
+            res.status(200).json(updatedRoom);
+        })
+        .catch(error => {
+            // Ensure we don't send a response if one was already sent
+            if (!res.headersSent) {
+                res.status(500).json({ error: 'Failed to add participant' });
+            }
+        });
 };
 
 // Remove a participant from a chat room
@@ -51,8 +80,8 @@ exports.removeParticipant = (req, res) => {
         { $pull: { participants: req.body.userId } },  // Remove the specified participant
         { new: true }
     )
-    .then(updatedRoom => res.status(200).json(updatedRoom))
-    .catch(error => res.status(400).json({ error }));
+        .then(updatedRoom => res.status(200).json(updatedRoom))
+        .catch(error => res.status(400).json({ error }));
 };
 
 // Delete a chat room by ID

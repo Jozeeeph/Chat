@@ -11,24 +11,11 @@ exports.getAllUsers = (req,res,next) => {
 };
 
 exports.banUser = (req, res, next) => {
-    const userId = req.params.id;
-    User.findById(userId)
-        .then(user => {
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            // Toggle the banned status
-            user.banned = !user.banned;
-            return user.save();
-        })
-        .then(updatedUser => {
-            res.status(200).json({ message: updatedUser.banned ? 'User banned' : 'User unbanned', banned: updatedUser.banned });
-        })
-        .catch(error => {
-            res.status(500).json({ error: 'Failed to ban/unban user' });
-        });
+    User.updateOne({ _id: req.params.id }, { banned: true })
+        .then(() => res.status(200).json({ message: 'User banned successfully!' }))
+        .catch(error => res.status(400).json({ error }));
 };
+
 
 exports.toggleBan = (req, res, next) => {
     const userId = req.params.id;

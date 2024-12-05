@@ -11,6 +11,6 @@ module.exports = (req, res, next) => {
         req.user = decoded; 
         next();
     } catch (error) {
-        res.status(403).json({ message: 'Invalid or expired token.' });
+        res.status(401).redirect('/login');
     }
 };

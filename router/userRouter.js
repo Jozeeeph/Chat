@@ -41,7 +41,7 @@ router.get('/dashboard', async (req, res) => {
 router.put('/update/:id', authMiddleware, roleMiddleware, adminCtrl.updateUser);
 
 // Ban a user (Requires authentication and admin role)
-router.put('/ban/:id', authMiddleware, roleMiddleware, adminCtrl.banUser);
+router.put('/:action/:userId', authMiddleware, roleMiddleware, adminCtrl.banUser);
 
 // Delete a user (Requires authentication and admin role)
 router.delete('/delete/:id', authMiddleware, roleMiddleware, adminCtrl.deleteUser);
